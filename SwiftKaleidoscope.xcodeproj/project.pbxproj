@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4697BB481C2FF3AC007FD167 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4697BB471C2FF3AC007FD167 /* main.swift */; };
-		46F89DB51C2FF44B00DC1787 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB41C2FF44B00DC1787 /* Symbols.swift */; };
+		46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */; };
+		46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB61C2FF92C00DC1787 /* Lexer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +27,8 @@
 /* Begin PBXFileReference section */
 		4697BB441C2FF3AC007FD167 /* SwiftKaleidoscope */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftKaleidoscope; sourceTree = BUILT_PRODUCTS_DIR; };
 		4697BB471C2FF3AC007FD167 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		46F89DB41C2FF44B00DC1787 /* Symbols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
+		46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASCIICharacters.swift; sourceTree = "<group>"; };
+		46F89DB61C2FF92C00DC1787 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +62,8 @@
 			isa = PBXGroup;
 			children = (
 				4697BB471C2FF3AC007FD167 /* main.swift */,
-				46F89DB41C2FF44B00DC1787 /* Symbols.swift */,
+				46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */,
+				46F89DB61C2FF92C00DC1787 /* Lexer.swift */,
 			);
 			path = SwiftKaleidoscope;
 			sourceTree = "<group>";
@@ -123,7 +126,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4697BB481C2FF3AC007FD167 /* main.swift in Sources */,
-				46F89DB51C2FF44B00DC1787 /* Symbols.swift in Sources */,
+				46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */,
+				46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
