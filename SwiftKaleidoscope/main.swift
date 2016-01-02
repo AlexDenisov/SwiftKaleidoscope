@@ -8,9 +8,8 @@
 
 runloop:
 while true {
-    let char = getASCIICharacter()
-    switch char {
-    case ASCIICharacter.EOF: break runloop
-    case _: print("\(char)")
+    switch nextToken() {
+    case .EOF: break runloop
+    case let token: print("\(token)")
     }
 }

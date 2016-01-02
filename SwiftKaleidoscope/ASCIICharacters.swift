@@ -147,13 +147,17 @@ func getASCIICharacter() -> ASCIICharacter {
     switch character {
     case .Some(_): return character!
     case .None:
-        print("Skipping \(rawValue)")
+        print("lex error: skipping \(rawValue)")
         return getASCIICharacter()
     }
 }
 
 private func characterMatches(character: ASCIICharacter, predicate: (Int32) -> (Int32)) -> Bool {
     return predicate(character.rawValue) == Int32(1)
+}
+
+func isSpaceCharacter(character: ASCIICharacter) -> Bool {
+    return characterMatches(character, predicate: isspace)
 }
 
 func isAlphaCharacter(character: ASCIICharacter) -> Bool {
