@@ -183,6 +183,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_BUILD_DIR = /Users/alexdenisov/Projects/LLVM/build_static;
+				LLVM_LIBS = "-lLLVMAnalysis -lLLVMCore -lLLVMSupport";
 				LLVM_SOURCE_DIR = /Users/alexdenisov/Projects/LLVM/llvm;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
@@ -222,6 +223,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_BUILD_DIR = /Users/alexdenisov/Projects/LLVM/build_static;
+				LLVM_LIBS = "-lLLVMAnalysis -lLLVMCore -lLLVMSupport";
 				LLVM_SOURCE_DIR = /Users/alexdenisov/Projects/LLVM/llvm;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				SDKROOT = macosx;
@@ -239,8 +241,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
 				OTHER_LDFLAGS = (
-					"-lLLVMCore",
-					"-lLLVMSupport",
+					"$(LLVM_LIBS)",
 					"-ltermcap",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -257,8 +258,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
 				OTHER_LDFLAGS = (
-					"-lLLVMCore",
-					"-lLLVMSupport",
+					"$(LLVM_LIBS)",
 					"-ltermcap",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

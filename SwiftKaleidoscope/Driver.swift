@@ -6,9 +6,13 @@
 //  Copyright © 2016 lowlevelbits. All rights reserved.
 //
 
-func runloop() {
-    codeGen()
+import LLVM_C
 
+let module = LLVMModuleCreateWithName("Kaleidoscope")
+let builder = LLVMCreateBuilder()
+let context = CodeGenContext(module: module, builder: builder, passManager: nil, namedValues: [String : LLVMValueRef]())
+
+func runloop() {
     consumeToken()
 runloop:
     while true {
@@ -22,17 +26,21 @@ runloop:
     }
 }
 
-private func dump(dumpable: CustomStringConvertible) {
-    print("\(dumpable.description)")
+private func dump(dumpable: LLVMValueRef) {
+    LLVMDumpValue(dumpable)
 }
 
 func handleDefinition() {
     do {
         let function = try parseFunctionDefintion()
-        dump(function)
+        let code = try function.codegen(context)
+        dump(code)
     }
     catch ParserError.Error(let reason) {
         print("parser error: \(reason)")
+    }
+    catch CodeGenError.Error(let reason) {
+        print("code gen error: \(reason)")
     }
     catch _ {
         print("How is it possible?")
@@ -42,10 +50,14 @@ func handleDefinition() {
 func handleExtern() {
     do {
         let externPrototype = try parseExternFunction()
-        dump(externPrototype)
+        let code = try externPrototype.codegen(context)
+        dump(code)
     }
     catch ParserError.Error(let reason) {
         print("parser error: \(reason)")
+    }
+    catch CodeGenError.Error(let reason) {
+        print("code gen error: \(reason)")
     }
     catch _ {
         print("How is it possible?")
@@ -55,10 +67,14 @@ func handleExtern() {
 func handleTopLevelExpression() {
     do {
         let topLevel = try parseTopLevelExpression()
-        dump(topLevel)
+        let code = try topLevel.codegen(context)
+        dump(code)
     }
     catch ParserError.Error(let reason) {
         print("parser error: \(reason)")
+    }
+    catch CodeGenError.Error(let reason) {
+        print("code gen error: \(reason)")
     }
     catch _ {
         print("How is it possible?")
