@@ -7,6 +7,8 @@
 //
 
 func runloop() {
+    codeGen()
+
     consumeToken()
 runloop:
     while true {

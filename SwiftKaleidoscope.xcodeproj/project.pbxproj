@@ -10,6 +10,7 @@
 		4697BB481C2FF3AC007FD167 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4697BB471C2FF3AC007FD167 /* main.swift */; };
 		46A92DFE1C37F47B005F7A41 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92DFD1C37F47B005F7A41 /* Parser.swift */; };
 		46A92E131C39AD78005F7A41 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E121C39AD78005F7A41 /* Driver.swift */; };
+		46A92E151C39CAAE005F7A41 /* CodeGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E141C39CAAE005F7A41 /* CodeGen.swift */; };
 		46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */; };
 		46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB61C2FF92C00DC1787 /* Lexer.swift */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,7 @@
 		4697BB471C2FF3AC007FD167 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		46A92DFD1C37F47B005F7A41 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		46A92E121C39AD78005F7A41 /* Driver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
+		46A92E141C39CAAE005F7A41 /* CodeGen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGen.swift; sourceTree = "<group>"; };
 		46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASCIICharacters.swift; sourceTree = "<group>"; };
 		46F89DB61C2FF92C00DC1787 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,6 +72,7 @@
 				46F89DB61C2FF92C00DC1787 /* Lexer.swift */,
 				46A92DFD1C37F47B005F7A41 /* Parser.swift */,
 				46A92E121C39AD78005F7A41 /* Driver.swift */,
+				46A92E141C39CAAE005F7A41 /* CodeGen.swift */,
 			);
 			path = SwiftKaleidoscope;
 			sourceTree = "<group>";
@@ -132,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46A92E131C39AD78005F7A41 /* Driver.swift in Sources */,
+				46A92E151C39CAAE005F7A41 /* CodeGen.swift in Sources */,
 				46A92DFE1C37F47B005F7A41 /* Parser.swift in Sources */,
 				4697BB481C2FF3AC007FD167 /* main.swift in Sources */,
 				46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */,
@@ -178,8 +182,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LLVM_BUILD_DIR = /Users/alexdenisov/Projects/LLVM/build_static;
+				LLVM_SOURCE_DIR = /Users/alexdenisov/Projects/LLVM/llvm;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -216,8 +221,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LLVM_BUILD_DIR = /Users/alexdenisov/Projects/LLVM/build_static;
+				LLVM_SOURCE_DIR = /Users/alexdenisov/Projects/LLVM/llvm;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -225,14 +231,39 @@
 		4697BB4C1C2FF3AC007FD167 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					__STDC_LIMIT_MACROS,
+					__STDC_CONSTANT_MACROS,
+				);
+				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
+				OTHER_LDFLAGS = (
+					"-lLLVMCore",
+					"-lLLVMSupport",
+					"-ltermcap",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/include $(LLVM_SOURCE_DIR)/include";
 			};
 			name = Debug;
 		};
 		4697BB4D1C2FF3AC007FD167 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__STDC_LIMIT_MACROS,
+					__STDC_CONSTANT_MACROS,
+				);
+				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
+				OTHER_LDFLAGS = (
+					"-lLLVMCore",
+					"-lLLVMSupport",
+					"-ltermcap",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				USER_HEADER_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/include $(LLVM_SOURCE_DIR)/include";
 			};
 			name = Release;
 		};
