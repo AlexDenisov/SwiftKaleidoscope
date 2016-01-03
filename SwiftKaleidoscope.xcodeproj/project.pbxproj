@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4697BB481C2FF3AC007FD167 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4697BB471C2FF3AC007FD167 /* main.swift */; };
+		46A92DFE1C37F47B005F7A41 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92DFD1C37F47B005F7A41 /* Parser.swift */; };
+		46A92E131C39AD78005F7A41 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E121C39AD78005F7A41 /* Driver.swift */; };
 		46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */; };
 		46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB61C2FF92C00DC1787 /* Lexer.swift */; };
 /* End PBXBuildFile section */
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		4697BB441C2FF3AC007FD167 /* SwiftKaleidoscope */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftKaleidoscope; sourceTree = BUILT_PRODUCTS_DIR; };
 		4697BB471C2FF3AC007FD167 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		46A92DFD1C37F47B005F7A41 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		46A92E121C39AD78005F7A41 /* Driver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
 		46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASCIICharacters.swift; sourceTree = "<group>"; };
 		46F89DB61C2FF92C00DC1787 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,6 +68,8 @@
 				4697BB471C2FF3AC007FD167 /* main.swift */,
 				46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */,
 				46F89DB61C2FF92C00DC1787 /* Lexer.swift */,
+				46A92DFD1C37F47B005F7A41 /* Parser.swift */,
+				46A92E121C39AD78005F7A41 /* Driver.swift */,
 			);
 			path = SwiftKaleidoscope;
 			sourceTree = "<group>";
@@ -125,6 +131,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46A92E131C39AD78005F7A41 /* Driver.swift in Sources */,
+				46A92DFE1C37F47B005F7A41 /* Parser.swift in Sources */,
 				4697BB481C2FF3AC007FD167 /* main.swift in Sources */,
 				46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */,
 				46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */,

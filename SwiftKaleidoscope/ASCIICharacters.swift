@@ -8,7 +8,7 @@
 
 import Darwin
 
-enum ASCIICharacter : Int32 {
+enum ASCIICharacter : Int32, CustomStringConvertible {
     case EOF = -1
 
     case NullTerminator           = 0x00
@@ -139,6 +139,13 @@ enum ASCIICharacter : Int32 {
     case BracketClosed            = 0x7D // }
     case Tilde                    = 0x7E // ~
     case Delete                   = 0x7F
+
+    var description: String { get {
+        if self == .EOF {
+            return "EOF"
+        }
+        return String(UnicodeScalar(UInt32(self.rawValue)))
+    }}
 }
 
 func getASCIICharacter() -> ASCIICharacter {
