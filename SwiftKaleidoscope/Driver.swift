@@ -51,6 +51,14 @@ func handleExtern() {
 }
 
 func handleTopLevelExpression() {
-    let topLevel = parseTopLevelExpression()
-    dump(topLevel)
+    do {
+        let topLevel = try parseTopLevelExpression()
+        dump(topLevel)
+    }
+    catch ParserError.Error(let reason) {
+        print("parser error: \(reason)")
+    }
+    catch _ {
+        print("How is it possible?")
+    }
 }
