@@ -11,6 +11,7 @@
 		46A92DFE1C37F47B005F7A41 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92DFD1C37F47B005F7A41 /* Parser.swift */; };
 		46A92E131C39AD78005F7A41 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E121C39AD78005F7A41 /* Driver.swift */; };
 		46A92E151C39CAAE005F7A41 /* CodeGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E141C39CAAE005F7A41 /* CodeGen.swift */; };
+		46A92E2A1C3B1082005F7A41 /* JIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E291C3B1082005F7A41 /* JIT.swift */; };
 		46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */; };
 		46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB61C2FF92C00DC1787 /* Lexer.swift */; };
 /* End PBXBuildFile section */
@@ -33,6 +34,7 @@
 		46A92DFD1C37F47B005F7A41 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		46A92E121C39AD78005F7A41 /* Driver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
 		46A92E141C39CAAE005F7A41 /* CodeGen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGen.swift; sourceTree = "<group>"; };
+		46A92E291C3B1082005F7A41 /* JIT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JIT.swift; sourceTree = "<group>"; };
 		46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASCIICharacters.swift; sourceTree = "<group>"; };
 		46F89DB61C2FF92C00DC1787 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +75,7 @@
 				46A92DFD1C37F47B005F7A41 /* Parser.swift */,
 				46A92E121C39AD78005F7A41 /* Driver.swift */,
 				46A92E141C39CAAE005F7A41 /* CodeGen.swift */,
+				46A92E291C3B1082005F7A41 /* JIT.swift */,
 			);
 			path = SwiftKaleidoscope;
 			sourceTree = "<group>";
@@ -136,6 +139,7 @@
 			files = (
 				46A92E131C39AD78005F7A41 /* Driver.swift in Sources */,
 				46A92E151C39CAAE005F7A41 /* CodeGen.swift in Sources */,
+				46A92E2A1C3B1082005F7A41 /* JIT.swift in Sources */,
 				46A92DFE1C37F47B005F7A41 /* Parser.swift in Sources */,
 				4697BB481C2FF3AC007FD167 /* main.swift in Sources */,
 				46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */,
@@ -183,7 +187,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_BUILD_DIR = /Users/alexdenisov/Projects/LLVM/build_static;
-				LLVM_LIBS = "-lLLVMScalarOpts -lLLVMInstCombine -lLLVMTransformUtils -lLLVMAnalysis -lLLVMCore -lLLVMSupport";
+				LLVM_LIBS = "-lLLVMX86Disassembler -lLLVMX86AsmParser -lLLVMX86CodeGen -lLLVMSelectionDAG -lLLVMAsmPrinter -lLLVMCodeGen -lLLVMScalarOpts -lLLVMInstCombine -lLLVMInstrumentation -lLLVMProfileData -lLLVMTransformUtils -lLLVMBitWriter -lLLVMX86Desc -lLLVMMCDisassembler -lLLVMX86Info -lLLVMX86AsmPrinter -lLLVMX86Utils -lLLVMMCJIT -lLLVMExecutionEngine -lLLVMTarget -lLLVMAnalysis -lLLVMRuntimeDyld -lLLVMObject -lLLVMMCParser -lLLVMBitReader -lLLVMMC -lLLVMCore -lLLVMSupport";
 				LLVM_SOURCE_DIR = /Users/alexdenisov/Projects/LLVM/llvm;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
@@ -223,7 +227,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LLVM_BUILD_DIR = /Users/alexdenisov/Projects/LLVM/build_static;
-				LLVM_LIBS = "-lLLVMScalarOpts -lLLVMInstCombine -lLLVMTransformUtils -lLLVMAnalysis -lLLVMCore -lLLVMSupport";
+				LLVM_LIBS = "-lLLVMX86Disassembler -lLLVMX86AsmParser -lLLVMX86CodeGen -lLLVMSelectionDAG -lLLVMAsmPrinter -lLLVMCodeGen -lLLVMScalarOpts -lLLVMInstCombine -lLLVMInstrumentation -lLLVMProfileData -lLLVMTransformUtils -lLLVMBitWriter -lLLVMX86Desc -lLLVMMCDisassembler -lLLVMX86Info -lLLVMX86AsmPrinter -lLLVMX86Utils -lLLVMMCJIT -lLLVMExecutionEngine -lLLVMTarget -lLLVMAnalysis -lLLVMRuntimeDyld -lLLVMObject -lLLVMMCParser -lLLVMBitReader -lLLVMMC -lLLVMCore -lLLVMSupport";
 				LLVM_SOURCE_DIR = /Users/alexdenisov/Projects/LLVM/llvm;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				SDKROOT = macosx;
@@ -242,6 +246,7 @@
 				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
 				OTHER_LDFLAGS = (
 					"$(LLVM_LIBS)",
+					"-lz",
 					"-ltermcap",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -259,6 +264,7 @@
 				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
 				OTHER_LDFLAGS = (
 					"$(LLVM_LIBS)",
+					"-lz",
 					"-ltermcap",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

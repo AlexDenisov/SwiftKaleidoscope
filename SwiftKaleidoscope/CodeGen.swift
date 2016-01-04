@@ -15,9 +15,9 @@ struct CodeGenContext {
     var namedValues: [String : LLVMValueRef]
 }
 
-let module = LLVMModuleCreateWithName("Kaleidoscope")
-let builder = LLVMCreateBuilder()
-let passManager = passManagerForModule(module)
+private let module = LLVMModuleCreateWithName("Kaleidoscope")
+private let builder = LLVMCreateBuilder()
+private let passManager = passManagerForModule(module)
 
 let currentCodeGenContext = CodeGenContext(module: module,
     builder: builder,
@@ -25,7 +25,7 @@ let currentCodeGenContext = CodeGenContext(module: module,
     namedValues: [String : LLVMValueRef]()
 )
 
-func passManagerForModule(module: LLVMModuleRef) -> LLVMPassManagerRef {
+private func passManagerForModule(module: LLVMModuleRef) -> LLVMPassManagerRef {
     let passManager = LLVMCreateFunctionPassManagerForModule(module)
     LLVMAddBasicAliasAnalysisPass(passManager)
     LLVMAddInstructionCombiningPass(passManager)

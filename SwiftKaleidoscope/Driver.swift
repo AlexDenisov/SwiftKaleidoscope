@@ -9,6 +9,10 @@
 import LLVM_C
 
 func runloop() {
+    LLVMLinkInMCJIT()
+    LLVMInitializeNativeTarget()
+    LLVMInitializeNativeAsmPrinter()
+
     consumeToken()
 runloop:
     while true {
@@ -64,7 +68,8 @@ func handleTopLevelExpression() {
     do {
         let topLevel = try parseTopLevelExpression()
         let code = try topLevel.codegen(currentCodeGenContext)
-        dump(code)
+        let result = runFunction(code, module: currentCodeGenContext.module)
+        print("\(result)")
     }
     catch ParserError.Error(let reason) {
         print("parser error: \(reason)")
