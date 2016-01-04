@@ -8,10 +8,6 @@
 
 import LLVM_C
 
-let module = LLVMModuleCreateWithName("Kaleidoscope")
-let builder = LLVMCreateBuilder()
-let context = CodeGenContext(module: module, builder: builder, passManager: nil, namedValues: [String : LLVMValueRef]())
-
 func runloop() {
     consumeToken()
 runloop:
@@ -33,7 +29,7 @@ private func dump(dumpable: LLVMValueRef) {
 func handleDefinition() {
     do {
         let function = try parseFunctionDefintion()
-        let code = try function.codegen(context)
+        let code = try function.codegen(currentCodeGenContext)
         dump(code)
     }
     catch ParserError.Error(let reason) {
@@ -50,7 +46,7 @@ func handleDefinition() {
 func handleExtern() {
     do {
         let externPrototype = try parseExternFunction()
-        let code = try externPrototype.codegen(context)
+        let code = try externPrototype.codegen(currentCodeGenContext)
         dump(code)
     }
     catch ParserError.Error(let reason) {
@@ -67,7 +63,7 @@ func handleExtern() {
 func handleTopLevelExpression() {
     do {
         let topLevel = try parseTopLevelExpression()
-        let code = try topLevel.codegen(context)
+        let code = try topLevel.codegen(currentCodeGenContext)
         dump(code)
     }
     catch ParserError.Error(let reason) {

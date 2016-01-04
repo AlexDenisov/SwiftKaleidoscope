@@ -15,6 +15,29 @@ struct CodeGenContext {
     var namedValues: [String : LLVMValueRef]
 }
 
+let module = LLVMModuleCreateWithName("Kaleidoscope")
+let builder = LLVMCreateBuilder()
+let passManager = passManagerForModule(module)
+
+let currentCodeGenContext = CodeGenContext(module: module,
+    builder: builder,
+    passManager: passManager,
+    namedValues: [String : LLVMValueRef]()
+)
+
+func passManagerForModule(module: LLVMModuleRef) -> LLVMPassManagerRef {
+    let passManager = LLVMCreateFunctionPassManagerForModule(module)
+    LLVMAddBasicAliasAnalysisPass(passManager)
+    LLVMAddInstructionCombiningPass(passManager)
+    LLVMAddReassociatePass(passManager)
+    LLVMAddGVNPass(passManager)
+    LLVMAddCFGSimplificationPass(passManager)
+
+    LLVMInitializeFunctionPassManager(passManager)
+
+    return passManager
+}
+
 enum CodeGenError : ErrorType {
     case Error(String)
 }
@@ -31,7 +54,10 @@ extension NumberExpr : CodeGen {
 
 extension VariableExpr : CodeGen {
     func codegen(context: CodeGenContext) throws -> LLVMValueRef {
-        return context.namedValues[name]!
+        if let value = context.namedValues[self.name] {
+            return value
+        }
+        throw CodeGenError.Error("Can't find variable '\(self.name)'")
     }
 }
 
@@ -140,8 +166,8 @@ extension Function : CodeGen {
 
             LLVMBuildRet(context.builder, body)
             LLVMVerifyFunction(function, LLVMAbortProcessAction)
-//            LLVMRunFunctionPassManager(context.passManager, function)
-            
+            LLVMRunFunctionPassManager(context.passManager, function)
+
             return function
         }
         catch CodeGenError.Error(let reason) {
