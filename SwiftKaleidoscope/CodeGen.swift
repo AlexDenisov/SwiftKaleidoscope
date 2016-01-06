@@ -175,3 +175,60 @@ extension Function : CodeGen {
         }
     }
 }
+
+extension IfExpr : CodeGen {
+    func codegen(context: CodeGenContext) throws -> LLVMValueRef {
+        do {
+            let condition = try (self.condition as! CodeGen).codegen(context)
+
+            let ifCond = LLVMBuildFCmp(context.builder, LLVMRealONE, condition, LLVMConstReal(LLVMDoubleType(), 0), "ifCond")
+
+            let functionEntryBasicBlock = LLVMGetInsertBlock(context.builder)
+            let function = LLVMGetBasicBlockParent(functionEntryBasicBlock)
+
+            var thenBasicBlock = LLVMAppendBasicBlock(function, "then")
+            LLVMPositionBuilderAtEnd(context.builder, thenBasicBlock)
+            let thenBranchCode = try (self.thenBranch as! CodeGen).codegen(context)
+            thenBasicBlock = LLVMGetInsertBlock(builder)
+
+            var elseBasicBlock = LLVMAppendBasicBlock(function, "else")
+            LLVMMoveBasicBlockAfter(elseBasicBlock, thenBasicBlock)
+            LLVMPositionBuilderAtEnd(context.builder, elseBasicBlock)
+
+            let elseBranchCode = try (self.elseBranch as! CodeGen).codegen(context)
+            elseBasicBlock = LLVMGetInsertBlock(builder)
+
+            LLVMPositionBuilderAtEnd(context.builder, functionEntryBasicBlock)
+            LLVMBuildCondBr(context.builder, ifCond, thenBasicBlock, elseBasicBlock)
+
+            let continueBasicBlock = LLVMAppendBasicBlock(function, "continue")
+
+            LLVMPositionBuilderAtEnd(context.builder, thenBasicBlock)
+            LLVMBuildBr(context.builder, continueBasicBlock)
+            thenBasicBlock = LLVMGetInsertBlock(builder)
+
+            LLVMPositionBuilderAtEnd(context.builder, elseBasicBlock)
+            LLVMBuildBr(context.builder, continueBasicBlock)
+            elseBasicBlock = LLVMGetInsertBlock(builder)
+
+            LLVMPositionBuilderAtEnd(context.builder, continueBasicBlock)
+
+            let phi = LLVMBuildPhi(context.builder, LLVMDoubleType(), "iftmp")
+
+            let incomingValues = UnsafeMutablePointer<LLVMValueRef>.alloc(strideof(LLVMValueRef) * 2)
+            incomingValues.initializeFrom([thenBranchCode, elseBranchCode])
+            let incomingBlocks = UnsafeMutablePointer<LLVMBasicBlockRef>.alloc(strideof(LLVMBasicBlockRef) * 2)
+            incomingBlocks.initializeFrom([thenBasicBlock, elseBasicBlock])
+
+            defer {
+                incomingValues.dealloc(2)
+                incomingBlocks.dealloc(2)
+            }
+            LLVMAddIncoming(phi, incomingValues, incomingBlocks, 2)
+            return phi
+        }
+        catch CodeGenError.Error(let reason) {
+            throw CodeGenError.Error(reason)
+        }
+    }
+}

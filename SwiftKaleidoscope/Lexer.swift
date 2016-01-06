@@ -16,6 +16,10 @@ enum Token {
     case Comment(String)
     case Number(Double)
     case Character(ASCIICharacter)
+
+    case If
+    case Then
+    case Else
 }
 
 private typealias LexerPredicate = (ASCIICharacter -> Bool)
@@ -61,6 +65,18 @@ func nextToken() -> Token {
 
         if identifier == "extern" {
             return .Extern
+        }
+
+        if identifier == "if" {
+            return .If
+        }
+
+        if identifier == "then" {
+            return .Then
+        }
+
+        if identifier == "else" {
+            return .Else
         }
 
         return .Identifier(identifier)

@@ -55,6 +55,18 @@ struct CallExpr : Expr {
     }
 }
 
+struct IfExpr : Expr {
+    let condition: Expr
+    let thenBranch: Expr
+    let elseBranch: Expr
+
+    var description: String { get {
+        return "if " + self.condition.description + "\n" +
+            "then " + self.thenBranch.description + "\n" +
+            "else " + self.elseBranch.description
+    }}
+}
+
 struct Prototype : CustomStringConvertible {
     let name: String
     let arguments: [String]
@@ -239,15 +251,50 @@ func parseIdentifierExpr(identifier: String) throws -> Expr {
 }
 
 
+// IfExpr ::= if Expr then Expr else Expr
+func parseIfExpression() throws -> Expr {
+    do {
+        consumeToken() // eat 'if'
+
+        let condition = try parseExpression()
+
+        guard case .Then = currentToken else {
+            throw ParserError.Error("expected 'then'")
+        }
+
+        consumeToken() // eat 'then'
+
+        let thenBranch = try parseExpression()
+
+        guard case .Else = currentToken else {
+            throw ParserError.Error("expected 'else'")
+        }
+
+        consumeToken() // eat 'else'
+
+        let elseBranch = try parseExpression()
+
+        return IfExpr(condition: condition, thenBranch: thenBranch, elseBranch: elseBranch)
+    }
+    catch ParserError.Error(let reason) {
+        throw ParserError.Error(reason)
+    }
+    catch _ {
+        throw ParserError.Error("Something went wrong")
+    }
+}
+
 // PrimaryExpr
 //   ::= IdentifierExpr
 //   ::= NumberExpr
 //   ::= ParenExpr
+//   ::= IfExpr
 func parsePrimaryExpression() throws -> Expr {
     switch currentToken {
     case .Number(let number): return parseNumberExpression(number)
     case .Identifier(let identifier): return try parseIdentifierExpr(identifier)
     case .Character(ASCIICharacter.ParenthesesOpened): return try parseParenExpression()
+    case .If: return try parseIfExpression()
     case _:
         consumeToken()
         throw ParserError.Error("can't parse \(currentToken)")
