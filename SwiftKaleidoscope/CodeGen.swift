@@ -221,14 +221,81 @@ extension IfExpr : CodeGen {
             incomingBlocks.initializeFrom([thenBasicBlock, elseBasicBlock])
 
             defer {
-                incomingValues.dealloc(2)
-                incomingBlocks.dealloc(2)
+                incomingValues.dealloc(strideof(LLVMValueRef) * 2)
+                incomingBlocks.dealloc(strideof(LLVMBasicBlockRef) * 2)
             }
             LLVMAddIncoming(phi, incomingValues, incomingBlocks, 2)
             return phi
         }
         catch CodeGenError.Error(let reason) {
             throw CodeGenError.Error(reason)
+        }
+    }
+}
+
+extension ForExpr : CodeGen {
+    func codegen(var context: CodeGenContext) throws -> LLVMValueRef {
+        do {
+            let startValue = try (self.start as! CodeGen).codegen(context)
+
+            let preHeaderBasicBlock = LLVMGetInsertBlock(context.builder)
+            let function = LLVMGetBasicBlockParent(preHeaderBasicBlock)
+
+            let loopBasicBlock = LLVMAppendBasicBlock(function, "loop")
+
+            LLVMBuildBr(context.builder, loopBasicBlock)
+            LLVMPositionBuilderAtEnd(context.builder, loopBasicBlock)
+
+            let phi = LLVMBuildPhi(context.builder, LLVMDoubleType(), self.variable)
+
+            let incomingStartValue = UnsafeMutablePointer<LLVMValueRef>.alloc(strideof(LLVMValueRef))
+            incomingStartValue.initializeFrom([startValue])
+            let incomingPreheaderBlock = UnsafeMutablePointer<LLVMBasicBlockRef>.alloc(strideof(LLVMBasicBlockRef))
+            incomingPreheaderBlock.initializeFrom([preHeaderBasicBlock])
+
+            defer {
+                incomingStartValue.dealloc(strideof(LLVMValueRef))
+                incomingPreheaderBlock.dealloc(strideof(LLVMBasicBlockRef))
+            }
+            LLVMAddIncoming(phi, incomingStartValue, incomingPreheaderBlock, 1)
+
+            let oldValue = context.namedValues[self.variable]
+            context.namedValues[self.variable] = phi
+
+            try (self.body as! CodeGen).codegen(context)
+
+            let stepValue = try (self.step as! CodeGen).codegen(context)
+
+            let nextValue = LLVMBuildFAdd(context.builder, phi, stepValue, "nextvar")
+
+            let endValue = try (self.end as! CodeGen).codegen(context)
+
+            let endCondition = LLVMBuildFCmp(context.builder, LLVMRealONE, endValue, LLVMConstReal(LLVMDoubleType(), 0), "loopcond")
+
+            let loopEndBasicBlock = LLVMGetInsertBlock(context.builder)
+
+            let afterBasicBlock = LLVMAppendBasicBlock(function, "afterloop")
+
+            LLVMBuildCondBr(context.builder, endCondition, loopBasicBlock, afterBasicBlock)
+            LLVMPositionBuilderAtEnd(context.builder, afterBasicBlock)
+
+            let loopEndValuePhi = UnsafeMutablePointer<LLVMValueRef>.alloc(strideof(LLVMValueRef))
+            loopEndValuePhi.initializeFrom([nextValue])
+            let loopEndBasicBlockPhi = UnsafeMutablePointer<LLVMBasicBlockRef>.alloc(strideof(LLVMBasicBlockRef))
+            loopEndBasicBlockPhi.initializeFrom([loopEndBasicBlock])
+
+            defer {
+                loopEndValuePhi.dealloc(strideof(LLVMValueRef))
+                loopEndBasicBlockPhi.dealloc(strideof(LLVMBasicBlockRef))
+            }
+            LLVMAddIncoming(phi, loopEndValuePhi, loopEndBasicBlockPhi, 1)
+
+            context.namedValues[self.variable] = oldValue
+
+            return LLVMConstNull(LLVMDoubleType())
+        }
+        catch {
+            throw error
         }
     }
 }

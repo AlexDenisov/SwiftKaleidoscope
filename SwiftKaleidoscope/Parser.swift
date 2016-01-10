@@ -67,6 +67,20 @@ struct IfExpr : Expr {
     }}
 }
 
+struct ForExpr : Expr {
+    let variable: String
+    let start: Expr
+    let end: Expr
+    let step: Expr
+    let body: Expr
+
+    var description: String { get {
+        return "for " + self.variable + " = " + self.start.description +
+            ", " + self.end.description + " " + self.step.description +
+            " in\n" + self.body.description;
+        }}
+}
+
 struct Prototype : CustomStringConvertible {
     let name: String
     let arguments: [String]
@@ -284,17 +298,70 @@ func parseIfExpression() throws -> Expr {
     }
 }
 
+/// ForExpr ::= for Identifier = Expr, Expr, Expr in Expr
+func parseForExpression() throws -> Expr {
+    do {
+        consumeToken() // eat 'for'
+
+        guard case .Identifier(let variableName) = currentToken else {
+            throw ParserError.Error("expected Identifier after 'for'")
+        }
+
+        consumeToken() // eat identifier
+
+        guard case .Character(.EqualsSign) = currentToken else {
+            throw ParserError.Error("expected '=' after 'for'")
+        }
+
+        consumeToken() // eat '='
+
+        let start = try parseExpression()
+
+        guard case .Character(.Comma) = currentToken else {
+            throw ParserError.Error("expected ',' after start expression")
+        }
+
+        consumeToken() // eat ','
+
+        let end = try parseExpression()
+
+        // step value is not optional in our implementation
+        guard case .Character(.Comma) = currentToken else {
+            throw ParserError.Error("expected ',' after end expression")
+        }
+
+        consumeToken() // eat ','
+
+        let step = try parseExpression()
+
+        guard case .In = currentToken else {
+            throw ParserError.Error("expected 'in' after step expression")
+        }
+
+        consumeToken() // eat 'in'
+
+        let body = try parseExpression()
+
+        return ForExpr(variable: variableName, start: start, end: end, step: step, body: body)
+    }
+    catch {
+        throw error
+    }
+}
+
 // PrimaryExpr
 //   ::= IdentifierExpr
 //   ::= NumberExpr
 //   ::= ParenExpr
 //   ::= IfExpr
+//   ::= ForExpr
 func parsePrimaryExpression() throws -> Expr {
     switch currentToken {
     case .Number(let number): return parseNumberExpression(number)
     case .Identifier(let identifier): return try parseIdentifierExpr(identifier)
     case .Character(ASCIICharacter.ParenthesesOpened): return try parseParenExpression()
     case .If: return try parseIfExpression()
+    case .For: return try parseForExpression()
     case _:
         consumeToken()
         throw ParserError.Error("can't parse \(currentToken)")

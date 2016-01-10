@@ -20,6 +20,9 @@ enum Token {
     case If
     case Then
     case Else
+
+    case For
+    case In
 }
 
 private typealias LexerPredicate = (ASCIICharacter -> Bool)
@@ -59,27 +62,16 @@ func nextToken() -> Token {
     if isAlphaCharacter(currentCharacter) {
         let identifier = consumeUntil(identifierPredicate)
 
-        if identifier == "def" {
-            return .Def
+        switch identifier {
+        case "def": return .Def
+        case "extern": return .Extern
+        case "if": return .If
+        case "then": return .Then
+        case "else": return .Else
+        case "for": return .For
+        case "in": return .In
+        case _: return .Identifier(identifier)
         }
-
-        if identifier == "extern" {
-            return .Extern
-        }
-
-        if identifier == "if" {
-            return .If
-        }
-
-        if identifier == "then" {
-            return .Then
-        }
-
-        if identifier == "else" {
-            return .Else
-        }
-
-        return .Identifier(identifier)
     }
 
     // Attempt to create Number Literal Token

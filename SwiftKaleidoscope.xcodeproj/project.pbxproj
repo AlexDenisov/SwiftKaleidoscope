@@ -12,6 +12,7 @@
 		46A92E131C39AD78005F7A41 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E121C39AD78005F7A41 /* Driver.swift */; };
 		46A92E151C39CAAE005F7A41 /* CodeGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E141C39CAAE005F7A41 /* CodeGen.swift */; };
 		46A92E2A1C3B1082005F7A41 /* JIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E291C3B1082005F7A41 /* JIT.swift */; };
+		46A92E931C431437005F7A41 /* kstdlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 46A92E921C431437005F7A41 /* kstdlib.c */; };
 		46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */; };
 		46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F89DB61C2FF92C00DC1787 /* Lexer.swift */; };
 /* End PBXBuildFile section */
@@ -35,6 +36,7 @@
 		46A92E121C39AD78005F7A41 /* Driver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
 		46A92E141C39CAAE005F7A41 /* CodeGen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGen.swift; sourceTree = "<group>"; };
 		46A92E291C3B1082005F7A41 /* JIT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JIT.swift; sourceTree = "<group>"; };
+		46A92E921C431437005F7A41 /* kstdlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kstdlib.c; sourceTree = "<group>"; };
 		46F89DB41C2FF44B00DC1787 /* ASCIICharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASCIICharacters.swift; sourceTree = "<group>"; };
 		46F89DB61C2FF92C00DC1787 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +78,7 @@
 				46A92E121C39AD78005F7A41 /* Driver.swift */,
 				46A92E141C39CAAE005F7A41 /* CodeGen.swift */,
 				46A92E291C3B1082005F7A41 /* JIT.swift */,
+				46A92E921C431437005F7A41 /* kstdlib.c */,
 			);
 			path = SwiftKaleidoscope;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 				4697BB481C2FF3AC007FD167 /* main.swift in Sources */,
 				46F89DB71C2FF92C00DC1787 /* Lexer.swift in Sources */,
 				46F89DB51C2FF44B00DC1787 /* ASCIICharacters.swift in Sources */,
+				46A92E931C431437005F7A41 /* kstdlib.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,12 +241,14 @@
 		4697BB4C1C2FF3AC007FD167 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 					__STDC_LIMIT_MACROS,
 					__STDC_CONSTANT_MACROS,
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
 				OTHER_LDFLAGS = (
 					"$(LLVM_LIBS)",
@@ -250,6 +256,7 @@
 					"-ltermcap",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				USER_HEADER_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/include $(LLVM_SOURCE_DIR)/include";
 			};
 			name = Debug;
@@ -257,10 +264,12 @@
 		4697BB4D1C2FF3AC007FD167 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__STDC_LIMIT_MACROS,
 					__STDC_CONSTANT_MACROS,
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(LLVM_BUILD_DIR)/lib";
 				OTHER_LDFLAGS = (
 					"$(LLVM_LIBS)",
