@@ -136,7 +136,8 @@ extension Prototype : CodeGen {
 }
 
 extension Function : CodeGen {
-    func codegen(var context: CodeGenContext) throws -> LLVMValueRef {
+    func codegen(context: CodeGenContext) throws -> LLVMValueRef {
+        var context = context
         do {
             var function = LLVMGetNamedFunction(context.module, self.prototype.name)
             if function == nil {
@@ -234,7 +235,8 @@ extension IfExpr : CodeGen {
 }
 
 extension ForExpr : CodeGen {
-    func codegen(var context: CodeGenContext) throws -> LLVMValueRef {
+    func codegen(context: CodeGenContext) throws -> LLVMValueRef {
+        var context = context
         do {
             let startValue = try (self.start as! CodeGen).codegen(context)
 

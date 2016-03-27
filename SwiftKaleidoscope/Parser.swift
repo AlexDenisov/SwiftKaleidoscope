@@ -152,7 +152,8 @@ func parseNumberExpression(number: Double) -> Expr {
 }
 
 // BinaryExpr ::= ('+' PrimaryExpr) *
-func parseBinaryExpression(expressionPrecedence: Int, var lhs: Expr) throws -> Expr {
+func parseBinaryExpression(expressionPrecedence: Int, lhs: Expr) throws -> Expr {
+    var lhs = lhs
     while true {
         let currentPrecedence = currentTokenPrecedence()
         if currentPrecedence < expressionPrecedence {
